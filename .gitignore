@@ -1,0 +1,17 @@
+.jj/
+.git/
+
+*.~$
+*.~undo-tree~
+
+elpa/
+games/
+auto-save-list/
+eln-cache/
+transient/
+tutorial/
+url/
+
+amx-items
+recentf
+tramp
