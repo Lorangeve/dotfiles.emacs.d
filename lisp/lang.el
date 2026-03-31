@@ -1,5 +1,16 @@
 ;;; lang.el --- Tree-sitter 与 LSP (eglot) -*- lexical-binding: t -*-
 
+(use-package typescript-ts-mode
+  :mode ("\\.ts\\'" "\\.tsx\\'")
+  ;;  :config
+  ;; 如果你使用 vtsls，需要告诉 eglot 使用它
+  ;;   (with-eval-after-load 'eglot
+  ;;     (add-to-list 'eglot-server-programs
+  ;;                  '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))
+  ;; 钩子：打开文件时自动启动 eglot
+  :hook (typescript-ts-mode . eglot-ensure))
+
+
 ;; Grammar 名须与内置 ts-mode 一致（如 C# 为 c-sharp，不是 csharp）。
 ;; 使用 URL + 分支 + 源码子目录，便于 `M-x treesit-install-language-grammar' 与各版本 Emacs 兼容。
 (setq treesit-language-source-alist
@@ -64,7 +75,7 @@
 
 (use-package eglot
   :config
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  (add-hook 'rust-mode-hook 'eglot-ensure)
+  (add-hook 'python-ts-mode-hook 'eglot-ensure)
+  (add-hook 'rust-ts-mode-hook 'eglot-ensure)
   (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
   (add-hook 'scheme-mode-hook 'eglot-ensure))
