@@ -12,3 +12,7 @@
   :ensure t
   :init
   (global-undo-tree-mode))
+
+(use-package org-modern
+  :ensure t
+  :hook ((org-mode . org-modern-mode)))
