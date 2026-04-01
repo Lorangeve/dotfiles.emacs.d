@@ -74,8 +74,10 @@
          '((mhtml-mode . mhtml-ts-mode)))))
 
 (use-package eglot
+  :hook ((python-ts-mode-hook . eglot-ensure)
+	 (rust-ts-mode-hook . eglot-ensure)
+	 (typescript-ts-mode-hook . eglot-ensure)
+	 (scheme-mode-hook . eglot-ensure))
   :config
-  (add-hook 'python-ts-mode-hook 'eglot-ensure)
-  (add-hook 'rust-ts-mode-hook 'eglot-ensure)
-  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
-  (add-hook 'scheme-mode-hook 'eglot-ensure))
+  (add-to-list 'eglot-server-programs
+	       '(scheme-mode . ("guile-lsp-server"))))
