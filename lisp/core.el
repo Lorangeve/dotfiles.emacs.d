@@ -23,5 +23,7 @@
 (column-number-mode t)       ;; 显示列数
 (global-auto-revert-mode t)  ;; 自动刷新
 
+(setq frame-resize-pixelwise t)
+
 (setq display-buffer-alist
       '(("\\*shell\\*" (display-buffer-below-selected))))

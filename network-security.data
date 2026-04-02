@@ -1,4 +1,0 @@
-;;;; -*- mode: lisp-data -*-
-(
- (:id "sha1:53ee6c991d8c1a4ca2c2d590db5ea83d8afa4dcb" :fingerprints ("sha1:af:94:b0:7f:bb:ee:f8:76:c9:00:94:8b:18:71:cf:02:40:a0:6c:99") :host "www.example.com:443" :conditions (:unknown-ca :invalid :verify-cert))
-)
