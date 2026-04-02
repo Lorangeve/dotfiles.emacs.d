@@ -1,16 +1,5 @@
 ;;; lang.el --- Tree-sitter 与 LSP (eglot) -*- lexical-binding: t -*-
 
-(use-package typescript-ts-mode
-  :mode ("\\.ts\\'" "\\.tsx\\'")
-  ;;  :config
-  ;; 如果你使用 vtsls，需要告诉 eglot 使用它
-  ;;   (with-eval-after-load 'eglot
-  ;;     (add-to-list 'eglot-server-programs
-  ;;                  '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))
-  ;; 钩子：打开文件时自动启动 eglot
-  :hook (typescript-ts-mode . eglot-ensure))
-
-
 ;; Grammar 名须与内置 ts-mode 一致（如 C# 为 c-sharp，不是 csharp）。
 ;; 使用 URL + 分支 + 源码子目录，便于 `M-x treesit-install-language-grammar' 与各版本 Emacs 兼容。
 (setq treesit-language-source-alist
@@ -73,11 +62,29 @@
        (when (fboundp 'mhtml-ts-mode)
          '((mhtml-mode . mhtml-ts-mode)))))
 
+(use-package typescript-ts-mode
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+	 ("\\.tsx\\'". tsx-ts-mode))
+  ;;  :config
+  ;; 如果你使用 vtsls，需要告诉 eglot 使用它
+  ;;   (with-eval-after-load 'eglot
+  ;;     (add-to-list 'eglot-server-programs
+  ;;                  '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))
+  ;; 钩子：打开文件时自动启动 eglot
+  ;;  :hook (typescript-ts-mode . eglot-ensure)
+  )
+
+(use-package kdl-mode
+  :ensure t
+  :mode (("\\.kdl\\'". kdl-mode)))
+
 (use-package eglot
-  :hook ((python-ts-mode-hook . eglot-ensure)
-	 (rust-ts-mode-hook . eglot-ensure)
-	 (typescript-ts-mode-hook . eglot-ensure)
-	 (scheme-mode-hook . eglot-ensure))
+  :hook ((python-ts-mode . eglot-ensure)
+	 (rust-ts-mode . eglot-ensure)
+	 (typescript-ts-mode . eglot-ensure)
+	 (tsx-ts-mode . eglot-ensure)
+	 (scheme-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs
-	       '(scheme-mode . ("guile-lsp-server"))))
+	       '(scheme-mode . ("guile-lsp-server"))
+	       '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))

@@ -1,0 +1,63 @@
+
+;; ----- amx-history -----
+(
+ kdl-mode
+ package-delete
+ treesit-install-language-grammar
+ package-install
+ transpose-frame
+ ellama-chat
+ eglot
+)
+
+;; ----- amx-data -----
+(
+ (package-install . 20)
+ (evil-mode . 4)
+ (helix-mode . 6)
+ (list-packages . 7)
+ (fanyi-dwim . 4)
+ (eww . 3)
+ (eww-readable . 1)
+ (ibuffer . 6)
+ (package-delete . 10)
+ (revert-buffer . 2)
+ (smart-mode-line-enable . 2)
+ (package-menu-mode-menu . 2)
+ (company-complete . 1)
+ (company-mode . 1)
+ (ivy-push-view . 2)
+ (ivy-pop-view . 2)
+ (avy-goto-char-timer . 1)
+ (rime-send-keybinding . 2)
+ (typescript-ts-mode . 10)
+ (treesit-install-language-grammar . 8)
+ (company-tabnine-install-binary . 1)
+ (customize-face . 1)
+ (guiler . 1)
+ (visual-line-mode . 5)
+ (calc . 1)
+ (hs-minor-mode . 2)
+ (org-modern-mode . 1)
+ (shell . 6)
+ (shell-command . 1)
+ (tsx-ts-mode . 1)
+ (eglot . 11)
+ (cd . 2)
+ (eglot-reconnect . 3)
+ (recentf . 4)
+ (eglot-shutdown . 1)
+ (eglot-shutdown-all . 4)
+ (pwd . 1)
+ (jump-to-register . 1)
+ (multiple-cursors-mode . 1)
+ (describe-font . 1)
+ (clipetty-mode . 2)
+ (xclip-mode . 2)
+ (enlarge-window . 1)
+ (balance-windows . 1)
+ (display-buffer-other-frame . 1)
+ (ellama-chat . 15)
+ (transpose-frame . 1)
+ (kdl-mode . 2)
+)

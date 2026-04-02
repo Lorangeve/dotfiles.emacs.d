@@ -4,13 +4,13 @@
 
 (let ((lisp-dir (expand-file-name "lisp" user-emacs-directory)))
   (add-to-list 'load-path lisp-dir)
-  (dolist (file '(
-		  "core"
+  (dolist (file '("core"
 		  "packages"
 		  "completion"
 		  "editing"
 		  "lang"
 		  "input"
 		  "appearance"
-		  "tools"))
+		  "tools"
+		  "llm-conf"))
     (load (expand-file-name (concat file ".el") lisp-dir) nil 'nomessage)))
