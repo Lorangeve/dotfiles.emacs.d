@@ -10,6 +10,9 @@
 
 (use-package undo-tree
   :ensure t
+  :custom
+  (undo-tree-history-directory-alist
+	`(("." . ,(expand-file-name ".undo-tree-history" user-emacs-directory))))
   :init
   (global-undo-tree-mode))
 

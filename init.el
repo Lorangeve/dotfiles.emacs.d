@@ -14,3 +14,4 @@
 		  "tools"
 		  "llm-conf"))
     (load (expand-file-name (concat file ".el") lisp-dir) nil 'nomessage)))
+(put 'set-goal-column 'disabled nil)
