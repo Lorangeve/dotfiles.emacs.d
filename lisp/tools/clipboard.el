@@ -1,19 +1,19 @@
-;;; Emacs 29+ 引入的 terminal-set-clipboard-handler
+;;; clipboard.el --- 终端下系统剪贴板（GUI 通常无需） -*- lexical-binding: t -*-
+;;
+;; `-nw` 或 SSH 终端里 Emacs 默认不桥接系统剪贴板，此处用平台命令行工具补齐。
 
 (defun my/clipboard-copy (text)
-  (let ((process-connection-type nil))
+  (let ((process-connection-type nil)) ;; 子进程用 pipe，避免 pty 吃掉二进制/大量文本
     (cond
-     ;; Wayland (Arch Linux)
+     ;; Wayland：需安装 wl-clipboard
      ((and (eq system-type 'gnu/linux) (getenv "WAYLAND_DISPLAY"))
       (let ((proc (start-process "wl-copy" nil "wl-copy" "--trim-newline")))
         (process-send-string proc text)
         (process-send-eof proc)))
-     ;; macOS
      ((eq system-type 'darwin)
       (let ((proc (start-process "pbcopy" nil "pbcopy")))
         (process-send-string proc text)
         (process-send-eof proc)))
-     ;; Windows
      ((eq system-type 'windows-nt)
       (let ((proc (start-process "clip" nil "clip")))
         (process-send-string proc text)
@@ -26,10 +26,10 @@
    ((eq system-type 'darwin)
     (shell-command-to-string "pbpaste"))
    ((eq system-type 'windows-nt)
-    ;; Windows 下使用 powershell 处理剪贴板比较稳妥
     (shell-command-to-string "powershell.exe -command Get-Clipboard"))))
 
-;; 只有在终端模式下才手动接管（GUI 模式通常自带支持）
 (unless (display-graphic-p)
-  (setq interprogram-cut-function 'my/clipboard-copy)
-  (setq interprogram-paste-function 'my/clipboard-paste))
+  (setq interprogram-cut-function #'my/clipboard-copy)
+  (setq interprogram-paste-function #'my/clipboard-paste))
+
+(provide 'clipboard)

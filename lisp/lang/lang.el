@@ -1,7 +1,8 @@
-;;; lang.el --- Tree-sitter 与 LSP (eglot) -*- lexical-binding: t -*-
+;;; lang.el --- Tree-sitter、major-mode 与 Eglot -*- lexical-binding: t -*-
 
-;; Grammar 名须与内置 ts-mode 一致（如 C# 为 c-sharp，不是 csharp）。
-;; 使用 URL + 分支 + 源码子目录，便于 `M-x treesit-install-language-grammar' 与各版本 Emacs 兼容。
+;;;; Tree-sitter grammar 源
+;; `treesit-install-language-grammar' 等会按语言符号下载；名称须与 Emacs 内置 *-ts-mode 一致（如 c-sharp）
+
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash" "master" "src")
         (c "https://github.com/tree-sitter/tree-sitter-c" "master" "src")
@@ -31,6 +32,8 @@
         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
         (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
         (yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml" "master" "src")))
+
+;;;; 打开 “旧” major-mode 文件时自动用内置 tree-sitter 版本（需已安装对应 grammar）
 
 (setq major-mode-remap-alist
       (append
@@ -62,29 +65,27 @@
        (when (fboundp 'mhtml-ts-mode)
          '((mhtml-mode . mhtml-ts-mode)))))
 
+;;;; 语言扩展（Emacs 自带，勿用 straight 再装一份）
+
 (use-package typescript-ts-mode
+  :straight nil
   :mode (("\\.ts\\'" . typescript-ts-mode)
-	 ("\\.tsx\\'". tsx-ts-mode))
-  ;;  :config
-  ;; 如果你使用 vtsls，需要告诉 eglot 使用它
-  ;;   (with-eval-after-load 'eglot
-  ;;     (add-to-list 'eglot-server-programs
-  ;;                  '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))
-  ;; 钩子：打开文件时自动启动 eglot
-  ;;  :hook (typescript-ts-mode . eglot-ensure)
-  )
+         ("\\.tsx\\'" . tsx-ts-mode)))
 
 (use-package kdl-mode
-  :ensure t
-  :mode (("\\.kdl\\'". kdl-mode)))
+  :mode (("\\.kdl\\'" . kdl-mode)))
+
+;;;; Eglot（内置 LSP 客户端）
+;; 需在 PATH 中能找到 guile-lsp-server、vtsls 等，否则 eglot 会报错
 
 (use-package eglot
+  :straight nil
   :hook ((python-ts-mode . eglot-ensure)
-	 (rust-ts-mode . eglot-ensure)
-	 (typescript-ts-mode . eglot-ensure)
-	 (tsx-ts-mode . eglot-ensure)
-	 (scheme-mode . eglot-ensure))
+         (rust-ts-mode . eglot-ensure)
+         (typescript-ts-mode . eglot-ensure)
+         (tsx-ts-mode . eglot-ensure)
+         (scheme-mode . eglot-ensure))
   :config
+  (add-to-list 'eglot-server-programs '(scheme-mode . ("guile-lsp-server")))
   (add-to-list 'eglot-server-programs
-	       '(scheme-mode . ("guile-lsp-server"))
-	       '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))
+               '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))
