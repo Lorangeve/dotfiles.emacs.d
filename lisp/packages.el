@@ -22,3 +22,7 @@
 (straight-use-package 'use-package)
 (require 'use-package)
 (setq straight-use-package-by-default t)
+
+;; Org：要用内置版时须向 straight 声明 (:type built-in)。否则依赖链可能再装一份 ELPA/GNU 的
+;; org，load-path 上两套混用会触发 *Warnings*（版本/宏不一致等）。
+(straight-use-package '(org :type built-in))
