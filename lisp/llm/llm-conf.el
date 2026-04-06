@@ -3,6 +3,8 @@
 ;; API Key 请勿提交到公开仓库；宜改用 (getenv "…") 或 auth-source。
 
 (use-package ellama
+  ;; 不在启动时 require；首次执行任一列出的命令（或包自带的 M-x）时再加载并执行 :config
+  :commands (ellama-chat ellama-ask-about ellama-code-complete)
   :custom
   (ellama-language "Chinese")
   ;; 部分 llm 包协议非 OSI 认证；关闭警告以免刷屏
@@ -21,5 +23,6 @@
     (setq ellama-translation-provider deepseek-provider)
     (setq ellama-summarization-provider deepseek-provider)
     (setq ellama-coding-provider deepseek-provider))
-  (ellama-context-header-line-global-mode +1)
-  (ellama-session-header-line-global-mode +1))
+  ;; 全局 header 会在所有缓冲区显示 session/context；按需请手动：
+  ;; M-x ellama-session-header-line-global-mode / ellama-context-header-line-global-mode
+  )

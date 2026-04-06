@@ -81,6 +81,15 @@
 ;;   typescript-language-server 与 tailwindcss-language-server
 ;;   （PATH：rass、typescript-language-server、tailwindcss-language-server；项目或全局需有 typescript）
 ;; 较低版本：仅直连 typescript-language-server，无同 buffer Tailwind LSP
+;;
+;; Tailwind：`tailwindcss-language-server` 的 CONFIG_GLOB 含花括号，Eglot 解析失败则类名无 hover
+;;（如 `p-4' → 展开的 CSS）；换成简单 glob。见 eglot#1469。
+
+(defun lang--eglot-glob-parse-around-tailwind (orig-fn &rest args)
+  (if (and (stringp (car args))
+           (string-match-p "tailwind" (car args)))
+      (apply orig-fn '("**/tailwind.config.*"))
+    (apply orig-fn args)))
 
 (use-package eglot
   :ensure nil
@@ -90,11 +99,17 @@
          (tsx-ts-mode . eglot-ensure)
          (scheme-mode . eglot-ensure))
   :config
+  (advice-add 'eglot--glob-parse :around #'lang--eglot-glob-parse-around-tailwind)
   (add-to-list 'eglot-server-programs '(scheme-mode . ("guile-lsp-server")))
   (unless (version<= "30.2" emacs-version)
     (add-to-list 'eglot-server-programs
                  '((typescript-ts-mode tsx-ts-mode)
                    . ("typescript-language-server" "--stdio")))))
+
+;;;; ElDoc（含 Eglot hover）：回显区允许多行
+;; 默认 nil 时文档被截成单行；正整数为最多占用的屏幕行数（仍受 `max-mini-window-height' 限制）。
+
+(setq eldoc-echo-area-use-multiline-p 8)
 
 (when (version<= "30.2" emacs-version)
   (use-package eglot-typescript-preset

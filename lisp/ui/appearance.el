@@ -24,6 +24,21 @@
 ;; 跳过 “安全主题” 确认（自行承担风险；主题来自已声明包时通常可接受）
 (setq custom-safe-themes t)
 
+;;;; Nerd Icons（mode-line 等；终端字体已含字形时 -nw 正常，GUI 需在 fontset 上注册符号字体）
+
+;; 若仍见豆腐块：M-x nerd-icons-install-fonts（安装到 ~/Library/Fonts/），然后重启 GUI。
+(use-package nerd-icons
+  :after doom-themes
+  :custom
+  (nerd-icons-font-family "Symbols Nerd Font Mono")
+  :config
+  (defun my/nerd-icons-register-fontset (&optional frame)
+    (when (display-graphic-p frame)
+      (with-selected-frame (or frame (selected-frame))
+        (nerd-icons-set-font))))
+  (add-hook 'window-setup-hook #'my/nerd-icons-register-fontset)
+  (add-hook 'after-make-frame-functions #'my/nerd-icons-register-fontset))
+
 ;;;; doom-modeline（与 doom-themes 同系；GUI 首次可 M-x nerd-icons-install-fonts）
 
 (use-package doom-modeline
