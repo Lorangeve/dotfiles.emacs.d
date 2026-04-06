@@ -46,5 +46,6 @@
          ("C-c g"   . counsel-git)
          ("C-c j"   . counsel-git-grep)
          ("C-c k"   . counsel-ag)
+	 ("C-c s"   . counsel-rg)
          ("C-x l"   . counsel-locate)
          ("C-S-o"   . counsel-rhythmbox)))
