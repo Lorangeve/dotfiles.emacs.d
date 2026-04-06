@@ -24,17 +24,14 @@
 ;; 跳过 “安全主题” 确认（自行承担风险；主题来自已声明包时通常可接受）
 (setq custom-safe-themes t)
 
-;;;; smart-mode-line（依赖 rich-minority，故先声明）
+;;;; doom-modeline（与 doom-themes 同系；GUI 首次可 M-x nerd-icons-install-fonts）
 
-(use-package rich-minority)
-
-(use-package smart-mode-line
-  :after rich-minority
+(use-package doom-modeline
+  :after doom-themes
+  :custom
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-lsp t)
+  (doom-modeline-check 'auto)
   :config
-  ;; sml/theme：与当前配色协调；doom-one 为暗色，'light 表示 mode-line 配色方案名
-  (setq sml/theme 'light)
-  ;; Emacs 29+：`window-total-width` 与 mode-line 实际可用宽度常不一致，sml 会高估
-  ;; minor-modes 区宽度，右侧 mode-line-misc-info（如 Eglot）易被裁掉一半。负值略收紧估算。
-  ;; 若仍偏：在 -2 ～ -12 间微调；参见 Malabarba/smart-mode-line#261。
-  (setq sml/extra-filler -6)
-  (sml/setup))
+  (setq doom-modeline-icon (display-graphic-p))
+  (doom-modeline-mode 1))

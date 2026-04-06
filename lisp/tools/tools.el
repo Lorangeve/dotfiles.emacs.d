@@ -21,6 +21,7 @@
 
 (use-package undo-tree
   :custom
+  (undo-tree-mode-lighter nil)
   ;; 撤销历史文件不要散落在各目录
   (undo-tree-history-directory-alist
    `(("." . ,(expand-file-name ".undo-tree-history" user-emacs-directory))))

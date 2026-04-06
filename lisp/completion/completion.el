@@ -3,12 +3,21 @@
 ;;;; Company：光标处弹出补全
 
 (use-package company
+  :custom (company-lighter nil)
   :config (global-company-mode))
 
 ;;;; 按前缀键后短暂提示后续可接按键
 
 (use-package which-key
+  :custom (which-key-lighter nil)
   :config (which-key-mode))
+
+;;;; Eldoc-box：ElDoc（含 Eglot hover）用浮动框显示，减轻 echo area 压力
+
+(use-package eldoc-box
+  :after eglot
+  ;; 上游已弃用 eldoc-box-mode，改用 eldoc-box-hover-mode（角上子帧）
+  :hook (eglot-managed-mode . eldoc-box-hover-mode))
 
 ;;;; Ivy：minibuffer 补全与缓冲切换
 
