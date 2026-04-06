@@ -65,10 +65,10 @@
        (when (fboundp 'mhtml-ts-mode)
          '((mhtml-mode . mhtml-ts-mode)))))
 
-;;;; 语言扩展（Emacs 自带，勿用 straight 再装一份）
+;;;; 语言扩展（内置模式，勿从 ELPA 再装一份）
 
 (use-package typescript-ts-mode
-  :straight nil
+  :ensure nil
   :mode (("\\.ts\\'" . typescript-ts-mode)
          ("\\.tsx\\'" . tsx-ts-mode)))
 
@@ -83,7 +83,7 @@
 ;; 较低版本：仅直连 typescript-language-server，无同 buffer Tailwind LSP
 
 (use-package eglot
-  :straight nil
+  :ensure nil
   :hook ((python-ts-mode . eglot-ensure)
          (rust-ts-mode . eglot-ensure)
          (typescript-ts-mode . eglot-ensure)
@@ -98,7 +98,10 @@
 
 (when (version<= "30.2" emacs-version)
   (use-package eglot-typescript-preset
+    :ensure nil
     :after eglot
+    :vc (:url "https://github.com/mwolson/eglot-typescript-preset"
+         :main-file "eglot-typescript-preset.el")
     ;; 须在 require 触发 preset 的 setup 之前写入（setup 在加载 el 末尾即执行）
     :init
     (setq eglot-typescript-preset-lsp-server 'rass)

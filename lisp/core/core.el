@@ -30,7 +30,7 @@
 ;;;; 项目根标记（除 .git 外）
 
 (use-package project
-  :straight nil
+  :ensure nil
   :custom
   (project-vc-extra-root-markers '(".jj"
                                    "package.json"

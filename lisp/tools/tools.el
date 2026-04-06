@@ -29,7 +29,9 @@
 ;;;; Org：远程图片内嵌显示
 
 (use-package org-remoteimg
-  :straight (org-remoteimg :type git :host github :repo "gaoDean/org-remoteimg"))
+  :ensure nil
+  :vc (:url "https://github.com/gaoDean/org-remoteimg"
+       :main-file "org-remoteimg.el"))
 
 ;;;; Org 标题/列表等现代排版
 

@@ -33,4 +33,8 @@
   :config
   ;; sml/theme：与当前配色协调；doom-one 为暗色，'light 表示 mode-line 配色方案名
   (setq sml/theme 'light)
+  ;; Emacs 29+：`window-total-width` 与 mode-line 实际可用宽度常不一致，sml 会高估
+  ;; minor-modes 区宽度，右侧 mode-line-misc-info（如 Eglot）易被裁掉一半。负值略收紧估算。
+  ;; 若仍偏：在 -2 ～ -12 间微调；参见 Malabarba/smart-mode-line#261。
+  (setq sml/extra-filler -6)
   (sml/setup))

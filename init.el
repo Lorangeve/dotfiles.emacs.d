@@ -1,7 +1,7 @@
 ;;; init.el --- Emacs 配置入口 -*- lexical-binding: t -*-
 ;;
 ;; 目录 layout（lisp/）：
-;;   packages.el     → straight + use-package
+;;   packages.el     → package.el（MELPA）+ use-package
 ;;   core/           → 路径、备份、project、全局编辑习惯
 ;;   ui/             → 外观（行号/主题/mode-line）
 ;;   completion/     → Ivy/Counsel、Company、which-key 等补全与提示
