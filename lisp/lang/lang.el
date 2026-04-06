@@ -76,7 +76,11 @@
   :mode (("\\.kdl\\'" . kdl-mode)))
 
 ;;;; Eglot（内置 LSP 客户端）
-;; 需在 PATH 中能找到 guile-lsp-server、vtsls 等，否则 eglot 会报错
+;; guile-lsp-server：Scheme
+;; Emacs ≥30.2：TS/TSX 由 eglot-typescript-preset 经 rass 同时拉起
+;;   typescript-language-server 与 tailwindcss-language-server
+;;   （PATH：rass、typescript-language-server、tailwindcss-language-server；项目或全局需有 typescript）
+;; 较低版本：仅直连 typescript-language-server，无同 buffer Tailwind LSP
 
 (use-package eglot
   :straight nil
@@ -87,5 +91,16 @@
          (scheme-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs '(scheme-mode . ("guile-lsp-server")))
-  (add-to-list 'eglot-server-programs
-               '((typescript-ts-mode tsx-ts-mode) . ("vtsls" "--stdio"))))
+  (unless (version<= "30.2" emacs-version)
+    (add-to-list 'eglot-server-programs
+                 '((typescript-ts-mode tsx-ts-mode)
+                   . ("typescript-language-server" "--stdio")))))
+
+(when (version<= "30.2" emacs-version)
+  (use-package eglot-typescript-preset
+    :after eglot
+    ;; 须在 require 触发 preset 的 setup 之前写入（setup 在加载 el 末尾即执行）
+    :init
+    (setq eglot-typescript-preset-lsp-server 'rass)
+    (setq eglot-typescript-preset-rass-tools
+          '(typescript-language-server tailwindcss-language-server))))
