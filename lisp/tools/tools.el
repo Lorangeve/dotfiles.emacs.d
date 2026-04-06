@@ -1,4 +1,8 @@
-;;; tools.el --- 窗口、历史、Org 美化、剪贴板 -*- lexical-binding: t -*-
+;;; tools.el --- 窗口、Shell 显示、历史、Org、剪贴板 -*- lexical-binding: t -*-
+
+;; *shell* 默认开在选中窗口下方，而不是占满半屏等默认行为
+(setq display-buffer-alist
+      '(("\\*shell\\*" (display-buffer-below-selected))))
 
 ;;;; 窗口切换：在多个窗口上标字母，按键直达
 
@@ -21,6 +25,11 @@
   (undo-tree-history-directory-alist
    `(("." . ,(expand-file-name ".undo-tree-history" user-emacs-directory))))
   :config (global-undo-tree-mode))
+
+;;;; Org：远程图片内嵌显示
+
+(use-package org-remoteimg
+  :straight (org-remoteimg :type git :host github :repo "gaoDean/org-remoteimg"))
 
 ;;;; Org 标题/列表等现代排版
 

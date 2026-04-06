@@ -1,4 +1,7 @@
-;;; appearance.el --- 主题、字体与 mode-line -*- lexical-binding: t -*-
+;;; appearance.el --- 主题、字体、行号与 mode-line -*- lexical-binding: t -*-
+
+(global-display-line-numbers-mode)
+(column-number-mode t)
 
 ;; 字体高度（1/10 pt）；可按显示器 DPI 调整
 (set-face-attribute 'default nil :height 130)

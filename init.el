@@ -2,11 +2,12 @@
 ;;
 ;; 目录 layout（lisp/）：
 ;;   packages.el     → straight + use-package
-;;   core/           → 路径、project、全局习惯
-;;   ui/             → 外观、补全界面
-;;   editing/        → 结构化编辑、输入法
+;;   core/           → 路径、备份、project、全局编辑习惯
+;;   ui/             → 外观（行号/主题/mode-line）
+;;   completion/     → Ivy/Counsel、Company、which-key 等补全与提示
+;;   editing/        → 结构化编辑（Paredit、Geiser）、输入法
 ;;   lang/           → 语言与 LSP
-;;   tools/          → 窗口、Org、剪贴板等工具
+;;   tools/          → 窗口与 Shell 显示、Org、剪贴板等
 ;;   llm/            → Ellama 等
 ;;
 ;; 各子目录已加入 `load-path`，模块内可用 `(require '…)` 引用同目录特征。
@@ -16,12 +17,11 @@
 
 (let ((lisp-dir (expand-file-name "lisp" user-emacs-directory)))
   (add-to-list 'load-path lisp-dir)
-  (dolist (sub '("core" "ui" "editing" "lang" "tools" "llm"))
+  (dolist (sub '("core" "ui" "completion" "editing" "lang" "tools" "llm"))
     (add-to-list 'load-path (expand-file-name sub lisp-dir)))
   (dolist (pair '(("packages" . "")
                   ("core" . "core")
-                  ("proj" . "core")
-                  ("completion" . "ui")
+                  ("completion" . "completion")
                   ("editing" . "editing")
                   ("lang" . "lang")
                   ("input" . "editing")

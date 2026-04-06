@@ -1,4 +1,9 @@
-;;; completion.el --- Minibuffer 与 Ivy/Counsel -*- lexical-binding: t -*-
+;;; completion.el --- Minibuffer（Ivy/Counsel）与缓冲内补全（Company） -*- lexical-binding: t -*-
+
+;;;; Company：光标处弹出补全
+
+(use-package company
+  :config (global-company-mode))
 
 ;;;; 按前缀键后短暂提示后续可接按键
 

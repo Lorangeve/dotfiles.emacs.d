@@ -1,4 +1,4 @@
-;;; core.el --- 路径、缓冲与全局编辑习惯 -*- lexical-binding: t -*-
+;;; core.el --- 路径、备份、project、全局编辑习惯 -*- lexical-binding: t -*-
 
 ;;;; 文件与备份
 
@@ -21,24 +21,18 @@
 ;; 用像素级调整窗口边缘，避免某些系统下 “拖不动到整数列”
 (setq frame-resize-pixelwise t)
 
-;;;; 界面
-
-(global-display-line-numbers-mode)
-(column-number-mode t)
-
 ;;;; 编辑行为
 
 (electric-pair-mode t)
 ;; 磁盘上文件被外部修改时自动重载缓冲区
 (global-auto-revert-mode t)
 
-;;;; 窗口
+;;;; 项目根标记（除 .git 外）
 
-;; *shell* 默认开在选中窗口下方，而不是占满半屏等默认行为
-(setq display-buffer-alist
-      '(("\\*shell\\*" (display-buffer-below-selected))))
-
-;;;; Org：远程图片内嵌显示
-
-(use-package org-remoteimg
-  :straight (org-remoteimg :type git :host github :repo "gaoDean/org-remoteimg"))
+(use-package project
+  :straight nil
+  :custom
+  (project-vc-extra-root-markers '(".jj"
+                                   "package.json"
+                                   "Cargo.toml"
+                                   "Makefile")))
