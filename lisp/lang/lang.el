@@ -71,9 +71,17 @@
   :ensure nil
   :mode (("\\.ts\\'" . typescript-ts-mode)
          ("\\.tsx\\'" . tsx-ts-mode)))
-
 (use-package kdl-mode
   :mode (("\\.kdl\\'" . kdl-mode)))
+(use-package dart-mode
+  :mode (("\\.dart\\'" . dart-mode)))
+
+
+;;;; Formatting
+(use-package apheleia
+  :ensure t
+  :config
+  (apheleia-global-mode t))
 
 ;;;; Eglot（内置 LSP 客户端）
 ;; guile-lsp-server：Scheme
@@ -91,16 +99,41 @@
       (apply orig-fn '("**/tailwind.config.*"))
     (apply orig-fn args)))
 
+;;;; Guile LSP：`guile-lsp-server` 子进程默认读的是 `process-environment` 里的
+;; `GUILE_LOAD_PATH`，与 Geiser REPL（及 `geiser-guile-load-path'）不同步时会出现
+;;「必须先开 Geiser」的错觉。此处把工程根目录与 Geiser 额外路径并入后再启动。
+
+(defun lang--guile-eglot-merge-load-path (project)
+  "Return a colon-separated GUILE_LOAD_PATH for PROJECT."
+  (let* ((root (directory-file-name (expand-file-name (project-root project))))
+         (from-env (when-let ((e (getenv "GUILE_LOAD_PATH")))
+                     (split-string e path-separator 'omit-nulls)))
+         (geiser-dirs (when (and (boundp 'geiser-guile-load-path)
+                                 (listp geiser-guile-load-path))
+                        geiser-guile-load-path))
+         (merged (delete-dups
+                  (append (list root)
+                          (or geiser-dirs '())
+                          (or from-env '())))))
+    (mapconcat #'identity merged ":")))
+
+(defun lang--guile-eglot-contact (_interactive project)
+  "Eglot contact for Scheme: same load path merge as we want Geiser to use."
+  (list "env"
+        (concat "GUILE_LOAD_PATH=" (lang--guile-eglot-merge-load-path project))
+        "guile-lsp-server"))
+
 (use-package eglot
   :ensure nil
-  :hook ((python-ts-mode . eglot-ensure)
+  :hook ((dart-mode . eglot-ensure)
+	 (python-ts-mode . eglot-ensure)
          (rust-ts-mode . eglot-ensure)
          (typescript-ts-mode . eglot-ensure)
          (tsx-ts-mode . eglot-ensure)
          (scheme-mode . eglot-ensure))
   :config
   (advice-add 'eglot--glob-parse :around #'lang--eglot-glob-parse-around-tailwind)
-  (add-to-list 'eglot-server-programs '(scheme-mode . ("guile-lsp-server")))
+  (add-to-list 'eglot-server-programs `(scheme-mode . ,#'lang--guile-eglot-contact))
   (unless (version<= "30.2" emacs-version)
     (add-to-list 'eglot-server-programs
                  '((typescript-ts-mode tsx-ts-mode)
