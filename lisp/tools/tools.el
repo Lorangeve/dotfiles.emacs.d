@@ -39,6 +39,19 @@
   :config
   (setq org-display-remote-inline-images 'cache))
 
+;;;; Org：光标移到内联图上时临时隐藏预览，离开后再显示（与 org-remoteimg 搭配见上游说明）
+
+(use-package org-imgtog
+  :ensure nil
+  :vc (:url "https://github.com/gaoDean/org-imgtog"
+       :main-file "org-imgtog.el")
+  :after org
+  :hook (org-mode . org-imgtog-mode))
+
+;;;; Org：剪贴板图片（wl-paste / xclip，见 `org-clipboard-image'）
+
+(require 'org-clipboard-image)
+
 ;;;; Org 标题/列表等现代排版
 
 (use-package org-modern
