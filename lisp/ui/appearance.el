@@ -24,16 +24,19 @@
 ;; 跳过 “安全主题” 确认（自行承担风险；主题来自已声明包时通常可接受）
 (setq custom-safe-themes t)
 
-;;;; doom-modeline（默认 **不用** Nerd 图标，避免 `nerd-icons-set-font' 改 fontset 与输入法冲突）
+;;;; doom-modeline + Nerd（**只**在 mode-line 用符号字体，不改全局 fontset）
 
-;; `doom-modeline' 包仍依赖 `nerd-icons'，但不会在本配置里调用 `nerd-icons-set-font'。
-;; 若要 mode-line 图标：设 `doom-modeline-icon' 为 t，并自行承担 fontset 与 Rime 等交互风险。
+;; `nerd-icons-*' 插入图标时会给字符加 `face' 里的 **:family**（Symbols Nerd Font Mono），
+;; 一般只作用于那一段 mode-line 文本即可显示，**无需** `nerd-icons-set-font'。
+;; 后者会对整帧 `set-fontset-font' prepend 大段码位，易与 Rime 等冲突——本配置永远不调用它。
+;; 系统需已安装 Nerd 字体（如 M-x nerd-icons-install-fonts）；无图形帧时图标自动关。
 (use-package doom-modeline
   :after doom-themes
   :custom
-  (doom-modeline-icon nil)
   (doom-modeline-minor-modes nil)
   (doom-modeline-lsp t)
   (doom-modeline-check 'auto)
   :config
+  ;; GUI 开图标（靠 :family，不动 fontset）；`-nw' 关闭避免豆腐块
+  (setq doom-modeline-icon (display-graphic-p))
   (doom-modeline-mode 1))
