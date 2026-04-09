@@ -24,29 +24,16 @@
 ;; 跳过 “安全主题” 确认（自行承担风险；主题来自已声明包时通常可接受）
 (setq custom-safe-themes t)
 
-;;;; Nerd Icons（mode-line 等；终端字体已含字形时 -nw 正常，GUI 需在 fontset 上注册符号字体）
+;;;; doom-modeline（默认 **不用** Nerd 图标，避免 `nerd-icons-set-font' 改 fontset 与输入法冲突）
 
-;; 若仍见豆腐块：M-x nerd-icons-install-fonts（安装到 ~/Library/Fonts/），然后重启 GUI。
-(use-package nerd-icons
-  :after doom-themes
-  :custom
-  (nerd-icons-font-family "Symbols Nerd Font Mono")
-  :config
-  (defun my/nerd-icons-register-fontset (&optional frame)
-    (when (display-graphic-p frame)
-      (with-selected-frame (or frame (selected-frame))
-        (nerd-icons-set-font))))
-  (add-hook 'window-setup-hook #'my/nerd-icons-register-fontset)
-  (add-hook 'after-make-frame-functions #'my/nerd-icons-register-fontset))
-
-;;;; doom-modeline（与 doom-themes 同系；GUI 首次可 M-x nerd-icons-install-fonts）
-
+;; `doom-modeline' 包仍依赖 `nerd-icons'，但不会在本配置里调用 `nerd-icons-set-font'。
+;; 若要 mode-line 图标：设 `doom-modeline-icon' 为 t，并自行承担 fontset 与 Rime 等交互风险。
 (use-package doom-modeline
   :after doom-themes
   :custom
+  (doom-modeline-icon nil)
   (doom-modeline-minor-modes nil)
   (doom-modeline-lsp t)
   (doom-modeline-check 'auto)
   :config
-  (setq doom-modeline-icon (display-graphic-p))
   (doom-modeline-mode 1))
