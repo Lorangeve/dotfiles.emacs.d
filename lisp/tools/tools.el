@@ -28,11 +28,16 @@
   :config (global-undo-tree-mode))
 
 ;;;; Org：远程图片内嵌显示
+;; 新版 Org（如 Emacs 30 内置）默认 `org-display-remote-inline-images' 为 `skip'，
+;; 会禁止 http(s) 内联图；须设为 `cache' 或 `download'，org-remoteimg 才会去拉取。
 
 (use-package org-remoteimg
   :ensure nil
   :vc (:url "https://github.com/gaoDean/org-remoteimg"
-       :main-file "org-remoteimg.el"))
+       :main-file "org-remoteimg.el")
+  :after org
+  :config
+  (setq org-display-remote-inline-images 'cache))
 
 ;;;; Org 标题/列表等现代排版
 
